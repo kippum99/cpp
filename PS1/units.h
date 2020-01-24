@@ -2,9 +2,10 @@
 
 using namespace std;
 
+// A united-value class
 class UValue {
-    double value;
-    string units;
+    double value;   // value itself
+    string units;   // units for the value
 
 public:
     UValue(double value, string units);
@@ -12,3 +13,5 @@ public:
     double get_value();
     string get_units();
 };
+
+UValue convert_to(UValue input, string to_units);
