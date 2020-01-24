@@ -1,12 +1,14 @@
-UValue::UValue(value, units) {
+#include "units.h"
+
+UValue::UValue(double value, string units) {
     this->value = value;
     this->units = units;
 }
 
-UValue::get_value() {
+double UValue::get_value() {
     return this->value;
 }
 
-UValue::get_units() {
+string UValue::get_units() {
     return this->units;
 }
