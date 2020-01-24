@@ -1,0 +1,13 @@
+CS11 Intro C++ Lab 1 - Questions
+================================
+
+Q1:  Are you using GNU g++ or LLVM clang++?  Show how you know this by
+     running a command on your system and including the output in this file.
+
+I am using LLVM clang++.
+output: Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+
+
+Q2:  What command do you use to build your submission?
+
+g++ -Wall *.cpp -o convert -std=c++14
