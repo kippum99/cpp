@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -13,6 +14,25 @@ public:
 
     double get_value();   // Returns value of a UValue
     string get_units();   // Returns units of a UValue
+};
+
+// A class to keep track of all conversions and perform conversions
+class UnitConverter {
+    // Struct to keep track of conversion details
+    struct Conversion {
+        string from_units;
+        double multiplier;
+        string to_units;
+    }
+
+    std::vector<Conversion> conversions; // Collection of conversions
+
+public:
+    // Default constructor
+    UnitConverter();
+
+    // Adds a conversion to the converter
+    void add_conversion(string from_units, double multiplier, string to_units);
 };
 
 // Converts units of a UValue input to to_units
