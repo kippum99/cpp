@@ -23,17 +23,14 @@ class UnitConverter {
         string from_units;
         double multiplier;
         string to_units;
-    }
+    };
 
     std::vector<Conversion> conversions; // Collection of conversions
 
 public:
-    // Default constructor
-    UnitConverter();
-
     // Adds a conversion to the converter
     void add_conversion(string from_units, double multiplier, string to_units);
-};
 
-// Converts units of a UValue input to to_units
-UValue convert_to(UValue input, string to_units);
+    // Converts units of a UValue input to to_units
+    UValue convert_to(UValue input, string to_units);
+};
