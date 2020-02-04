@@ -1,4 +1,5 @@
 #include "units.h"
+#include <stdexcept>
 
 // Contains implementation of functions in units.h
 

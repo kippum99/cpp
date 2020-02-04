@@ -7,12 +7,13 @@ UnitConverter init_converter() {
 
     converter.add_conversion("mi", 5280, "ft");
     converter.add_conversion("mi", 1.6, "km");
-    converter.add_conversion("mi", 12, "in");
+    converter.add_conversion("ft", 12, "in");
     converter.add_conversion("in", 2.54, "cm");
 
     converter.add_conversion("lb", 0.45, "kg");
     converter.add_conversion("stone", 14, "lb");
     converter.add_conversion("lb", 16, "oz");
+    converter.add_conversion("kg", 1000, "g");
 
     converter.add_conversion("gal", 3.79, "L");
     converter.add_conversion("bushel", 9.3, "gal");
