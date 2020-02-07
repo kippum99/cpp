@@ -1,3 +1,4 @@
+#include <set>
 #include <string>
 #include <vector>
 
@@ -10,10 +11,10 @@ class UValue {
 
 public:
     // Two-argument constructor - stores given value and units
-    UValue(double value, string units);
+    UValue(double value, const string &units);
 
-    double get_value();   // Returns value of a UValue
-    string get_units();   // Returns units of a UValue
+    double get_value() const;   // Returns value of a UValue
+    string get_units() const;   // Returns units of a UValue
 };
 
 // A class to keep track of all conversions and perform conversions
@@ -29,8 +30,11 @@ class UnitConverter {
 
 public:
     // Adds a conversion to the converter
-    void add_conversion(string from_units, double multiplier, string to_units);
+    void add_conversion(const string &from_units, double multiplier,
+                        const string &to_units);
 
     // Converts units of a UValue input to to_units
-    UValue convert_to(UValue input, string to_units);
+    UValue convert_to(const UValue &input, const string &to_units) const;
+    UValue convert_to(const UValue &input, const string &to_units,
+                        set<string> &seen) const;
 };

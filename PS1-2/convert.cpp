@@ -1,24 +1,27 @@
 #include "units.h"
 #include <iostream>
+#include <fstream>
 
-// Initializes a UnitConverter with basic conversions and returns it
-UnitConverter init_converter() {
+// Initializes a UnitConverter with conversions from a given file and returns it
+UnitConverter init_converter(const string &filename) {
     UnitConverter converter;
+    ifstream ifs{filename};
 
-    converter.add_conversion("mi", 5280, "ft");
-    converter.add_conversion("mi", 1.6, "km");
-    converter.add_conversion("ft", 12, "in");
-    converter.add_conversion("in", 2.54, "cm");
+    // Make sure file as opened successfully
+    if (!ifs) {
+        throw invalid_argument("Couldn't open file");
+    }
 
-    converter.add_conversion("lb", 0.45, "kg");
-    converter.add_conversion("stone", 14, "lb");
-    converter.add_conversion("lb", 16, "oz");
-    converter.add_conversion("kg", 1000, "g");
+    // Read conversion data from file until we hit EOF
+    while (ifs) {
+        string from_units;
+        double multiplier;
+        string to_units;
+        ifs >> from_units >> multiplier >> to_units;
 
-    converter.add_conversion("gal", 3.79, "L");
-    converter.add_conversion("bushel", 9.3, "gal");
-    converter.add_conversion("ft^3", 7.5, "gal");
-    converter.add_conversion("L", 1000, "ml");
+        // May throw invalid_argument exception if conversion already exists
+        converter.add_conversion(from_units, multiplier, to_units);
+    }
 
     return converter;
 }
@@ -27,7 +30,15 @@ UnitConverter init_converter() {
  * units
  */
 int main() {
-    UnitConverter u = init_converter();
+    UnitConverter u;
+
+    try {
+        u = init_converter("rules.txt");
+    }
+    catch (invalid_argument e) {
+        cout << e.what() << "\n";
+        return 1;
+    }
 
     // Prompt user for value with units
     double value;
