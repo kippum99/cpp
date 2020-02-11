@@ -1,3 +1,7 @@
+/* This file contains the main program that uses the UnitConverter and UValue
+ * classes to ask for a value with units and convert to different units.
+ */
+
 #include "units.h"
 #include <iostream>
 #include <fstream>
