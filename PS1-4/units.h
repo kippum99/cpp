@@ -4,12 +4,13 @@
 
 using namespace std;
 
-// A united-value class holding a double value and string units for the value
+/** A united-value class holding a double value and string units for the value.
+ */
 class UValue {
-    // value itself
+    /** value itself */
     double value;
 
-    // units for the value
+    /** units for the value */
     string units;
 
 public:
@@ -23,21 +24,23 @@ public:
     string get_units() const;
 };
 
-// A class to keep track of all conversions and perform conversions
+/** A class to keep track of all conversions and perform conversions.
+ */
 class UnitConverter {
-    // Struct to keep track of conversion details
+    /** Struct to keep track of conversion details
+     */
     struct Conversion {
-        // A unit to convert from
+        /** A unit to convert from */
         string from_units;
 
-        // Multiplier for converting value from from_units to to_units
+        /** Multiplier for converting value from from_units to to_units */
         double multiplier;
 
-        // A unit to convert to
+        /** A unit to convert to */
         string to_units;
     };
 
-    // Collection of conversions
+    /** Collection of conversions */
     std::vector<Conversion> conversions;
 
 public:

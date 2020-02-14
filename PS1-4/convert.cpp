@@ -6,7 +6,10 @@
 #include <iostream>
 #include <fstream>
 
-// Initializes a UnitConverter with conversions from a given file and returns it
+/**
+ * Initializes a UnitConverter with conversions from a given file and returns
+ * it.
+ */
 UnitConverter init_converter(const string &filename) {
     UnitConverter converter;
     ifstream ifs{filename};
@@ -30,7 +33,7 @@ UnitConverter init_converter(const string &filename) {
     return converter;
 }
 
-/* Main program that asks for a value with units and converts to different
+/** Main program that asks for a value with units and converts to different
  * units
  */
 int main() {

@@ -3,24 +3,27 @@
 
 // Contains implementation of functions in units.h
 
-// Two-argument constructor - stores given value and units
+/** Two-argument constructor - stores given value and units
+ */
 UValue::UValue(double value, const string &units) {
     this->value = value;
     this->units = units;
 }
 
-// Returns value of a UValue
+/** Returns value of a UValue
+ */
 double UValue::get_value() const {
     return value;
 }
 
-// Returns units of a UValue
+/** Returns units of a UValue
+ */
 string UValue::get_units() const {
     return units;
 }
 
 
-/* Adds a new conversion to the converter.
+/** Adds a new conversion to the converter.
  *
  * Throws invalid_argument if conversion already exists.
  */
@@ -40,7 +43,7 @@ void UnitConverter::add_conversion(const string &from_units, double multiplier,
     conversions.push_back({to_units, 1 / multiplier, from_units});
 }
 
-/* Converts units of a UValue input to to_units by calling three-argument
+/** Converts units of a UValue input to to_units by calling three-argument
  * convert_to() function.
  */
 UValue UnitConverter::convert_to(const UValue &input, const string &to_units)
@@ -49,7 +52,7 @@ UValue UnitConverter::convert_to(const UValue &input, const string &to_units)
     return convert_to(input, to_units, seen);
 }
 
-/* Converts units of a UValue input to to_units using recursion.
+/** Converts units of a UValue input to to_units using recursion.
  *
  * Throws invalid_argument if conversion doesn't exist.
  */
