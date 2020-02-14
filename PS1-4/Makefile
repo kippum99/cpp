@@ -1,6 +1,6 @@
 CXXFLAGS = -Wall -std=c++14
 
-all : convert test
+all : convert test doc
 
 convert: units.o convert.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
@@ -12,6 +12,6 @@ doc: Doxyfile
 	doxygen
 
 clean:
-	rm -f convert hw3testunits docs *.o *~
+	rm -rf convert test docs *.o *~
 
 .PHONY: all doc clean
