@@ -48,3 +48,18 @@ public:
     /** Division assignment operator for Rational numbers. */
     Rational & operator/=(const Rational &rhs);
 };
+
+/** Returns the sum of two given rational numbers. */
+Rational operator+(const Rational &a, const Rational &b);
+
+/** Returns the difference of two given rational numbers. */
+Rational operator-(const Rational &a, const Rational &b);
+
+/** Returns the product of two given rational numbers. */
+Rational operator*(const Rational &a, const Rational &b);
+
+/** Returns the quotient of two given rational numbers. */
+Rational operator/(const Rational &a, const Rational &b);
+
+/** Stream-Output for the given Rational number. */
+ostream & operator<<(ostream &os, const Rational &r);

@@ -1,18 +1,12 @@
-# CXXFLAGS = -Wall -std=c++14
-#
-# all : rational test
-#
-#
-# convert: units.o convert.o
-# 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-#
-# test: units.o testbase.o hw3testunits.o
-# 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-#
-# doc: Doxyfile
-# 	doxygen
-#
-# clean:
-# 	rm -rf convert test docs *.o *~
-#
-# .PHONY: all doc clean
+CXXFLAGS = -Wall -Werror -std=c++14
+
+all : rational.o testbase.o test-rational.o
+	$(CXX) $(CXXFLAGS) $^ -o test-rational $(LDFLAGS)
+
+test: test-rational
+	./test-rational
+
+clean:
+	rm -rf test-rational *.o *~
+
+.PHONY: all clean
