@@ -32,6 +32,7 @@ public:
     Matrix() {
         rows = 0;
         cols = 0;
+        elems = new int[0];
     }
 
     /** Constructor that initializes a rows x cols matrix where all elements
@@ -66,6 +67,11 @@ public:
      * the object.
      */
     Matrix & operator=(const Matrix &m) {
+        // Detect and handle self-assignment
+        if (this == &m) {
+            return *this;
+        }
+
         this->~Matrix();
         copy_contents(m);
 
@@ -129,6 +135,7 @@ public:
 
         return true;
     }
+
     /** Returns false if the two matrices are equal, with the same size and
      * identical elements, and true otherwise.
      */
