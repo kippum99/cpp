@@ -1,4 +1,4 @@
-CXXFLAGS = -Wall -Wpedantic -Werror=sign-compare -std=c++14
+CXXFLAGS = -Wall -Werror -Wpedantic -Werror=sign-compare -std=c++14
 
 all : test-matrix
 
