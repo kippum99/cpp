@@ -15,6 +15,6 @@ doc:
 	doxygen
 
 clean:
-	rm -rf convert test docs *.o *~
+	rm -rf convert hw3testunits docs *.o *~
 
 .PHONY: all test doc clean
