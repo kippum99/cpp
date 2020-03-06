@@ -1,9 +1,13 @@
+/* This file contains implementation of functions in units.h */
+
 #include "units.h"
 #include <stdexcept>
 
-// Contains implementation of functions in units.h
 
 /** Two-argument constructor - stores given value and units
+ *
+ * @param value Value to store
+ * @param units Units for the value
  */
 UValue::UValue(double value, const string &units) {
     this->value = value;
@@ -11,12 +15,16 @@ UValue::UValue(double value, const string &units) {
 }
 
 /** Returns value of a UValue
+ *
+ * @return Value of a UValue
  */
 double UValue::get_value() const {
     return value;
 }
 
 /** Returns units of a UValue
+ *
+ * @return Units of a UValue
  */
 string UValue::get_units() const {
     return units;
@@ -26,6 +34,10 @@ string UValue::get_units() const {
 /** Adds a new conversion to the converter.
  *
  * Throws invalid_argument if conversion already exists.
+ *
+ * @param from_units Units to convert from
+ * @param multiplier Multiplier to convert from from_units to to_units
+ * @param to_units Units to convert to
  */
 void UnitConverter::add_conversion(const string &from_units, double multiplier,
                                     const string &to_units) {
@@ -45,6 +57,10 @@ void UnitConverter::add_conversion(const string &from_units, double multiplier,
 
 /** Converts units of a UValue input to to_units by calling three-argument
  * convert_to() function.
+ *
+ * @param input Input UValue to convert
+ * @param to_units Units to convert to
+ * @return Converted UValue
  */
 UValue UnitConverter::convert_to(const UValue &input, const string &to_units)
                                                                     const {
@@ -55,6 +71,11 @@ UValue UnitConverter::convert_to(const UValue &input, const string &to_units)
 /** Converts units of a UValue input to to_units using recursion.
  *
  * Throws invalid_argument if conversion doesn't exist.
+ *
+ * @param input Input UValue to convert
+ * @param to_units Units to convert to
+ * @param seen A set of units we know how to convert to
+ * @return Converted UValue
  */
 UValue UnitConverter::convert_to(const UValue &input, const string &to_units,
                                     set<string> &seen) const {

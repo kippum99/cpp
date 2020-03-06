@@ -1,17 +1,20 @@
-CXXFLAGS = -Wall -std=c++14
+CXXFLAGS = -Wall -Werror -Wpedantic -Werror=sign-compare -std=c++14
 
-all : convert test doc
+all : convert hw3testunits
 
 convert: units.o convert.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
-test: units.o testbase.o hw3testunits.o
+hw3testunits: units.o testbase.o hw3testunits.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
-doc: Doxyfile
+test: hw3testunits
+	./hw3testunits
+
+doc:
 	doxygen
 
 clean:
 	rm -rf convert test docs *.o *~
 
-.PHONY: all doc clean
+.PHONY: all test doc clean

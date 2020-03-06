@@ -1,3 +1,5 @@
+/* Header file for UValue and Conversion classes */
+
 #include <set>
 #include <string>
 #include <vector>
@@ -7,10 +9,10 @@ using namespace std;
 /** A united-value class holding a double value and string units for the value.
  */
 class UValue {
-    /** value itself */
+    /** Value itself */
     double value;
 
-    /** units for the value */
+    /** Units for the value */
     string units;
 
 public:
