@@ -54,13 +54,14 @@ public:
 
     /** Constructor that initializes a rows x cols matrix where all elements
      * are set to 0.
+     *
      * An invalid_argument error is thrown if if rows or cols is not positive.
      *
      * @param rows Number of rows
      * @param cols Number of columns
      */
     Matrix(int rows, int cols) {
-        if (rows <= 0 || cols <= 0) {
+        if (rows < 0 || cols < 0) {
             throw invalid_argument(
                 "Number of rows and columns must be positive."
             );
@@ -271,7 +272,7 @@ public:
  * @param n Second Matrix object
  * @return Matrix object that is the sum of the two matrices
  */
-inline Matrix & operator+(const Matrix &m, const Matrix &n) {
+inline Matrix operator+(const Matrix &m, const Matrix &n) {
     return Matrix{m} += n;
 }
 
@@ -283,7 +284,7 @@ inline Matrix & operator+(const Matrix &m, const Matrix &n) {
  * @param n Second Matrix object
  * @return Matrix object that is the difference of the two matrices
  */
-inline Matrix & operator-(const Matrix &m, const Matrix &n) {
+inline Matrix operator-(const Matrix &m, const Matrix &n) {
     return Matrix{m} -= n;
 }
 
@@ -295,7 +296,7 @@ inline Matrix & operator-(const Matrix &m, const Matrix &n) {
  * @param n Second Matrix object
  * @return Matrix object that is the product of the two matrices
  */
-inline Matrix & operator*(const Matrix &m, const Matrix &n) {
+inline Matrix operator*(const Matrix &m, const Matrix &n) {
     int m_rows = m.numRows();
     int m_cols = m.numCols();
     int n_rows = n.numRows();
@@ -310,7 +311,7 @@ inline Matrix & operator*(const Matrix &m, const Matrix &n) {
     for (int r = 0; r < m_rows; r++) {
         for (int c = 0; c < n_cols; c++) {
             for (int i = 0; i < m_cols; i++) {
-                p.set(r, c, m.get(r, i) * n.get(i, c));
+                p.set(r, c, p.get(r, c) + m.get(r, i) * n.get(i, c));
             }
         }
     }
