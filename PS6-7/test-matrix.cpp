@@ -324,6 +324,448 @@ void test_matrix_equals(TestContext &ctx) {
 }
 
 
+/*! Test the Matrix + and += operators. */
+void test_matrix_addition(TestContext &ctx) {
+    Matrix result;
+
+    ctx.DESC("Matrix + and += operators on 0x0 matrices");
+    {
+        Matrix m01, m02;
+        result = m01 + m02;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+
+        result += m01 + m02;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+
+        result += result += result;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+    }
+    ctx.result();
+
+    ctx.DESC("Matrix + and += operators on matrices of compatible sizes");
+    {
+        Matrix ma1{2, 3}, ma2{2, 3};
+
+        ma1.set(0, 0, 5);
+        ma1.set(1, 1, -4);
+        ma1.set(0, 2, 18);
+
+        ma2.set(0, 0, -8);
+        ma2.set(1, 0, 14);
+        ma2.set(1, 1, 19);
+        ma2.set(1, 2, 7);
+
+        result = ma1 + ma2;
+
+        ctx.CHECK(result.numRows() == 2);
+        ctx.CHECK(result.numCols() == 3);
+        ctx.CHECK(result.get(0, 0) == -3);
+        ctx.CHECK(result.get(0, 1) ==  0);
+        ctx.CHECK(result.get(0, 2) == 18);
+        ctx.CHECK(result.get(1, 0) == 14);
+        ctx.CHECK(result.get(1, 1) == 15);
+        ctx.CHECK(result.get(1, 2) ==  7);
+
+        ctx.CHECK(ma1.numRows() == 2);
+        ctx.CHECK(ma1.numCols() == 3);
+        ctx.CHECK(ma1.get(0, 0) ==  5);
+        ctx.CHECK(ma1.get(0, 1) ==  0);
+        ctx.CHECK(ma1.get(0, 2) == 18);
+        ctx.CHECK(ma1.get(1, 0) ==  0);
+        ctx.CHECK(ma1.get(1, 1) == -4);
+        ctx.CHECK(ma1.get(1, 2) ==  0);
+
+        ctx.CHECK(ma2.numRows() == 2);
+        ctx.CHECK(ma2.numCols() == 3);
+        ctx.CHECK(ma2.get(0, 0) == -8);
+        ctx.CHECK(ma2.get(0, 1) ==  0);
+        ctx.CHECK(ma2.get(0, 2) ==  0);
+        ctx.CHECK(ma2.get(1, 0) == 14);
+        ctx.CHECK(ma2.get(1, 1) == 19);
+        ctx.CHECK(ma2.get(1, 2) ==  7);
+
+        ma1 += ma2;
+
+        ctx.CHECK(ma1.numRows() == 2);
+        ctx.CHECK(ma1.numCols() == 3);
+        ctx.CHECK(ma1.get(0, 0) == -3);
+        ctx.CHECK(ma1.get(0, 1) ==  0);
+        ctx.CHECK(ma1.get(0, 2) == 18);
+        ctx.CHECK(ma1.get(1, 0) == 14);
+        ctx.CHECK(ma1.get(1, 1) == 15);
+        ctx.CHECK(ma1.get(1, 2) ==  7);
+        
+        ctx.CHECK(ma2.numRows() == 2);
+        ctx.CHECK(ma2.numCols() == 3);
+        ctx.CHECK(ma2.get(0, 0) == -8);
+        ctx.CHECK(ma2.get(0, 1) ==  0);
+        ctx.CHECK(ma2.get(0, 2) ==  0);
+        ctx.CHECK(ma2.get(1, 0) == 14);
+        ctx.CHECK(ma2.get(1, 1) == 19);
+        ctx.CHECK(ma2.get(1, 2) ==  7);
+
+    }
+    ctx.result();
+
+    ctx.DESC("Chained usage of += operator");
+    {
+        Matrix mmm{2, 2};
+        mmm.set(0, 0, 5);
+        mmm.set(0, 1, 7);
+        mmm.set(1, 0, 11);
+        mmm.set(1, 1, 13);
+
+        // This is weird; each += doubles the matrix
+        mmm += mmm += mmm;
+
+        ctx.CHECK(mmm.numRows() == 2);
+        ctx.CHECK(mmm.numCols() == 2);
+        ctx.CHECK(mmm.get(0, 0) == 20);
+        ctx.CHECK(mmm.get(0, 1) == 28);
+        ctx.CHECK(mmm.get(1, 0) == 44);
+        ctx.CHECK(mmm.get(1, 1) == 52);
+    }
+    ctx.result();
+
+    ctx.DESC("Matrix + and += operators on matrices of incompatible sizes");
+    {
+        Matrix m1{3, 2}, m2{2, 3};
+        try {
+            m1 += m2;
+            ctx.CHECK(false); // Error:  No exception
+        }
+        catch (invalid_argument &) {
+            ctx.CHECK(true);  // Expected exception
+        }
+        catch (...) {
+            ctx.CHECK(false);  // Error:  Wrong kind of exception
+        }
+
+        try {
+            result = m1 + m2;
+            ctx.CHECK(false); // Error:  No exception
+        }
+        catch (invalid_argument &) {
+            ctx.CHECK(true);  // Expected exception
+        }
+        catch (...) {
+            ctx.CHECK(false);  // Error:  Wrong kind of exception
+        }
+    }
+    ctx.result();
+}
+
+
+/*! Test the Matrix - and -= operators. */
+void test_matrix_subtraction(TestContext &ctx) {
+    Matrix result;
+
+    ctx.DESC("Matrix - and -= operators on 0x0 matrices");
+    {
+        Matrix m01, m02;
+        result = m01 - m02;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+
+        result -= m01 - m02;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+
+        result -= result -= result;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+    }
+    ctx.result();
+
+    ctx.DESC("Matrix - and -= operators on matrices of compatible sizes");
+    {
+        Matrix ma1{2, 3}, ma2{2, 3};
+
+        ma1.set(0, 0, 5);
+        ma1.set(1, 1, -4);
+        ma1.set(0, 2, 18);
+
+        ma2.set(0, 0, -8);
+        ma2.set(1, 0, 14);
+        ma2.set(1, 1, 19);
+        ma2.set(1, 2, 7);
+
+        result = ma1 - ma2;
+
+        ctx.CHECK(result.numRows() == 2);
+        ctx.CHECK(result.numCols() == 3);
+        ctx.CHECK(result.get(0, 0) ==  13);
+        ctx.CHECK(result.get(0, 1) ==   0);
+        ctx.CHECK(result.get(0, 2) ==  18);
+        ctx.CHECK(result.get(1, 0) == -14);
+        ctx.CHECK(result.get(1, 1) == -23);
+        ctx.CHECK(result.get(1, 2) ==  -7);
+
+        ctx.CHECK(ma1.numRows() == 2);
+        ctx.CHECK(ma1.numCols() == 3);
+        ctx.CHECK(ma1.get(0, 0) ==  5);
+        ctx.CHECK(ma1.get(0, 1) ==  0);
+        ctx.CHECK(ma1.get(0, 2) == 18);
+        ctx.CHECK(ma1.get(1, 0) ==  0);
+        ctx.CHECK(ma1.get(1, 1) == -4);
+        ctx.CHECK(ma1.get(1, 2) ==  0);
+
+        ctx.CHECK(ma2.numRows() == 2);
+        ctx.CHECK(ma2.numCols() == 3);
+        ctx.CHECK(ma2.get(0, 0) == -8);
+        ctx.CHECK(ma2.get(0, 1) ==  0);
+        ctx.CHECK(ma2.get(0, 2) ==  0);
+        ctx.CHECK(ma2.get(1, 0) == 14);
+        ctx.CHECK(ma2.get(1, 1) == 19);
+        ctx.CHECK(ma2.get(1, 2) ==  7);
+
+        ma1 -= ma2;
+
+        ctx.CHECK(ma1.numRows() == 2);
+        ctx.CHECK(ma1.numCols() == 3);
+        ctx.CHECK(ma1.get(0, 0) ==  13);
+        ctx.CHECK(ma1.get(0, 1) ==   0);
+        ctx.CHECK(ma1.get(0, 2) ==  18);
+        ctx.CHECK(ma1.get(1, 0) == -14);
+        ctx.CHECK(ma1.get(1, 1) == -23);
+        ctx.CHECK(ma1.get(1, 2) ==  -7);
+        
+        ctx.CHECK(ma2.numRows() == 2);
+        ctx.CHECK(ma2.numCols() == 3);
+        ctx.CHECK(ma2.get(0, 0) == -8);
+        ctx.CHECK(ma2.get(0, 1) ==  0);
+        ctx.CHECK(ma2.get(0, 2) ==  0);
+        ctx.CHECK(ma2.get(1, 0) == 14);
+        ctx.CHECK(ma2.get(1, 1) == 19);
+        ctx.CHECK(ma2.get(1, 2) ==  7);
+
+    }
+    ctx.result();
+
+    ctx.DESC("Chained usage of -= operator");
+    {
+        Matrix mmm{2, 2};
+        mmm.set(0, 0, 5);
+        mmm.set(0, 1, 7);
+        mmm.set(1, 0, 11);
+        mmm.set(1, 1, 13);
+
+        // Way less exciting than += += ...
+        mmm -= mmm -= mmm;
+
+        ctx.CHECK(mmm.numRows() == 2);
+        ctx.CHECK(mmm.numCols() == 2);
+        ctx.CHECK(mmm.get(0, 0) == 0);
+        ctx.CHECK(mmm.get(0, 1) == 0);
+        ctx.CHECK(mmm.get(1, 0) == 0);
+        ctx.CHECK(mmm.get(1, 1) == 0);
+    }
+    ctx.result();
+
+    ctx.DESC("Matrix - and -= operators on matrices of incompatible sizes");
+    {
+        Matrix m1{3, 2}, m2{2, 3};
+        try {
+            m1 -= m2;
+            ctx.CHECK(false); // Error:  No exception
+        }
+        catch (invalid_argument &) {
+            ctx.CHECK(true);  // Expected exception
+        }
+        catch (...) {
+            ctx.CHECK(false);  // Error:  Wrong kind of exception
+        }
+
+        try {
+            result = m1 - m2;
+            ctx.CHECK(false); // Error:  No exception
+        }
+        catch (invalid_argument &) {
+            ctx.CHECK(true);  // Expected exception
+        }
+        catch (...) {
+            ctx.CHECK(false);  // Error:  Wrong kind of exception
+        }
+    }
+    ctx.result();
+}
+
+
+/*! Test the Matrix * and *= operators. */
+void test_matrix_multiplication(TestContext &ctx) {
+    Matrix result;
+
+    ctx.DESC("Matrix * and *= operators on 0x0 matrices");
+    {
+        Matrix m01, m02;
+        result = m01 * m02;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+
+        result *= m01 * m02;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+
+        result *= result *= result;
+        ctx.CHECK(result.numRows() == 0);
+        ctx.CHECK(result.numCols() == 0);
+        ctx.CHECK(result == m01);
+        ctx.CHECK(result == m02);
+    }
+    ctx.result();
+
+    ctx.DESC("Matrix * and *= operators on matrices of compatible sizes");
+    {
+        Matrix ma1{4, 2}, ma2{2, 3};
+
+        ma1.set(0, 0,  5);
+        ma1.set(0, 1,  9);
+        ma1.set(1, 0,  0);
+        ma1.set(1, 1,  2);
+        ma1.set(2, 0, -7);
+        ma1.set(2, 1,  1);
+        ma1.set(3, 0, -8);
+        ma1.set(3, 1,  0);
+
+        ma2.set(0, 0,  0);
+        ma2.set(0, 1,  4);
+        ma2.set(0, 2, -3);
+        ma2.set(1, 0,  7);
+        ma2.set(1, 1,  0);
+        ma2.set(1, 2,  5);
+
+        result = ma1 * ma2;
+
+        ctx.CHECK(result.numRows() ==   4);
+        ctx.CHECK(result.numCols() ==   3);
+        ctx.CHECK(result.get(0, 0) ==  63);
+        ctx.CHECK(result.get(0, 1) ==  20);
+        ctx.CHECK(result.get(0, 2) ==  30);
+        ctx.CHECK(result.get(1, 0) ==  14);
+        ctx.CHECK(result.get(1, 1) ==   0);
+        ctx.CHECK(result.get(1, 2) ==  10);
+        ctx.CHECK(result.get(2, 0) ==   7);
+        ctx.CHECK(result.get(2, 1) == -28);
+        ctx.CHECK(result.get(2, 2) ==  26);
+        ctx.CHECK(result.get(3, 0) ==   0);
+        ctx.CHECK(result.get(3, 1) == -32);
+        ctx.CHECK(result.get(3, 2) ==  24);
+
+        ctx.CHECK(ma1.numRows() == 4);
+        ctx.CHECK(ma1.numCols() == 2);
+        ctx.CHECK(ma1.get(0, 0) ==  5);
+        ctx.CHECK(ma1.get(0, 1) ==  9);
+        ctx.CHECK(ma1.get(1, 0) ==  0);
+        ctx.CHECK(ma1.get(1, 1) ==  2);
+        ctx.CHECK(ma1.get(2, 0) == -7);
+        ctx.CHECK(ma1.get(2, 1) ==  1);
+        ctx.CHECK(ma1.get(3, 0) == -8);
+        ctx.CHECK(ma1.get(3, 1) ==  0);
+        
+        ctx.CHECK(ma2.numRows() == 2);
+        ctx.CHECK(ma2.numCols() == 3);
+        ctx.CHECK(ma2.get(0, 0) ==  0);
+        ctx.CHECK(ma2.get(0, 1) ==  4);
+        ctx.CHECK(ma2.get(0, 2) == -3);
+        ctx.CHECK(ma2.get(1, 0) ==  7);
+        ctx.CHECK(ma2.get(1, 1) ==  0);
+        ctx.CHECK(ma2.get(1, 2) ==  5);
+
+        ma1 *= ma2;
+
+        ctx.CHECK(ma1.numRows() ==   4);
+        ctx.CHECK(ma1.numCols() ==   3);
+        ctx.CHECK(ma1.get(0, 0) ==  63);
+        ctx.CHECK(ma1.get(0, 1) ==  20);
+        ctx.CHECK(ma1.get(0, 2) ==  30);
+        ctx.CHECK(ma1.get(1, 0) ==  14);
+        ctx.CHECK(ma1.get(1, 1) ==   0);
+        ctx.CHECK(ma1.get(1, 2) ==  10);
+        ctx.CHECK(ma1.get(2, 0) ==   7);
+        ctx.CHECK(ma1.get(2, 1) == -28);
+        ctx.CHECK(ma1.get(2, 2) ==  26);
+        ctx.CHECK(ma1.get(3, 0) ==   0);
+        ctx.CHECK(ma1.get(3, 1) == -32);
+        ctx.CHECK(ma1.get(3, 2) ==  24);
+
+        ctx.CHECK(ma2.numRows() == 2);
+        ctx.CHECK(ma2.numCols() == 3);
+        ctx.CHECK(ma2.get(0, 0) ==  0);
+        ctx.CHECK(ma2.get(0, 1) ==  4);
+        ctx.CHECK(ma2.get(0, 2) == -3);
+        ctx.CHECK(ma2.get(1, 0) ==  7);
+        ctx.CHECK(ma2.get(1, 1) ==  0);
+        ctx.CHECK(ma2.get(1, 2) ==  5);
+    }
+    ctx.result();
+
+    ctx.DESC("Chained usage of *= operator");
+    {
+        Matrix mmm{2, 2};
+        mmm.set(0, 0, 5);
+        mmm.set(0, 1, 7);
+        mmm.set(1, 0, 11);
+        mmm.set(1, 1, 13);
+
+        mmm *= mmm *= mmm;
+
+        ctx.CHECK(mmm.numRows() == 2);
+        ctx.CHECK(mmm.numCols() == 2);
+        ctx.CHECK(mmm.get(0, 0) == 35352);
+        ctx.CHECK(mmm.get(0, 1) == 43848);
+        ctx.CHECK(mmm.get(1, 0) == 68904);
+        ctx.CHECK(mmm.get(1, 1) == 85464);
+    }
+    ctx.result();
+
+    ctx.DESC("Matrix * and *= operators on matrices of incompatible sizes");
+    {
+        Matrix m1{3, 2}, m2{3, 2};
+        try {
+            m1 *= m2;
+            ctx.CHECK(false); // Error:  No exception
+        }
+        catch (invalid_argument &) {
+            ctx.CHECK(true);  // Expected exception
+        }
+        catch (...) {
+            ctx.CHECK(false);  // Error:  Wrong kind of exception
+        }
+
+        try {
+            result = m1 * m2;
+            ctx.CHECK(false); // Error:  No exception
+        }
+        catch (invalid_argument &) {
+            ctx.CHECK(true);  // Expected exception
+        }
+        catch (...) {
+            ctx.CHECK(false);  // Error:  Wrong kind of exception
+        }
+    }
+    ctx.result();
+}
+
+
 /*! This program is a simple test-suite for the Matrix class. */
 int main() {
   
@@ -341,6 +783,14 @@ int main() {
     test_matrix_copy_assign(ctx);
 
     test_matrix_equals(ctx);
+
+    // Unfortunately, cannot test move operators since they are about
+    // performance and not correctness.  However, they will likely be used
+    // in the matrix-arithmetic tests.
+
+    test_matrix_addition(ctx);
+    test_matrix_subtraction(ctx);
+    test_matrix_multiplication(ctx);
 
     // Return 0 if everything passed, nonzero if something failed.
     return !ctx.ok();
